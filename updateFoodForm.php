@@ -14,6 +14,9 @@
 
   <?php
   require 'connect.php';
+  $sql_select = 'select * from types order by TypeID';
+  $stmt_s = $conn->prepare($sql_select);
+  $stmt_s->execute();
 
   $sql_select = 'select * from types order by TypeID';
   $stmt_s = $conn->prepare($sql_select);
@@ -34,7 +37,7 @@
     <div class="row">
       <div class="col-md-4"> <br>
         <h3>ฟอร์มแก้ไขข้อมูลเมนู</h3>
-        <form action="updateFood.php" method="POST">
+        <form action="updateFood.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="MenuID" value="<?= $result['MenuID']; ?>">
 
           <label for="name" class="col-sm-2 col-form-label"> ชื่อ : </label>
@@ -46,11 +49,23 @@
 
           <input type="number" name="Price" class="form-control" required value="<?= $result['Price']; ?>">
 
-          <!-- <label for="name" class="col-sm-2 col-form-label"> รูป : </label>
 
-          <input type="file" name="image" class="form-control" required value=""> -->
 
-          <br> <button type="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
+
+
+          <label for="name" class="col-sm-2 col-form-label"> ประเภท : </label>
+          <select name="TypeID" class="form-control">
+            <?php while ($cc = $stmt_s->fetch(PDO::FETCH_ASSOC)) { ?>
+              <option value="<?php echo $cc['TypeID']; ?>">
+                <?php echo $cc['TypeName']; ?>
+              </option>
+            <?php } ?>
+          </select>
+          <label for="name" class="col-sm-2 col-form-label"> รูป : </label>
+
+          <input type="file" name="image" class="form-control" required value="">
+
+          <br> <button type="submit" name="submit" class="btn btn-primary">แก้ไขข้อมูล</button>
         </form>
       </div>
     </div>
